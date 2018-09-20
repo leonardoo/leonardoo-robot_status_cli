@@ -6,11 +6,6 @@ cache:
     directories:
         - $HOME/.cache/pip
 
-
-env:
-  - TOX_ENV=django-111
-  - TOX_ENV=django-2
-
 matrix:
     include:
         # these are just to make travis's UI a bit prettier
