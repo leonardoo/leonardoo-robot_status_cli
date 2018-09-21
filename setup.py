@@ -2,10 +2,7 @@ import os
 import re
 import sys
 
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from setuptools import setup, find_packages
 
 
 def get_version(*file_paths):
@@ -43,9 +40,10 @@ if sys.argv[-1] == 'tag':
 setup(
     name='robot_status_cli',
     version='0.0.1',
-    packages=['robot_status_cli'],
+    packages=find_packages(exclude=['tests', 'tests.*']),
     url='',
-    install_requires=["requests==2.13.0","cryptography==2.3.1"],
+    install_requires=["requests==2.13.0",
+                      "cryptography==2.3.1"],
     license='MIT',
     author='leonardoo',
     author_email='leonardoorozcop@gmail.com',
