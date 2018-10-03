@@ -2,7 +2,7 @@ import sys
 import json
 import unittest
 
-if sys.version_info.major == 3:
+if sys.version_info[0] == 3:
     from unittest import mock
 else:
     # Expect the `mock` package for python 2.
@@ -13,6 +13,7 @@ else:
 import os
 
 from robot_status_cli.base import Client
+from robot_status_cli.compat import get_str_to_hex
 from robot_status_cli.utils import get_token_generator, verify_token
 
 
@@ -32,8 +33,8 @@ def mocked_requests_post(*args, **kwargs):
         verify_token("secret_key", json.dumps(data), token)
     except:
         return MockResponse(None, 401)
-
     return MockResponse(None, 201)
+
 
 class TestClient(unittest.TestCase):
 
@@ -42,13 +43,12 @@ class TestClient(unittest.TestCase):
         self.data = {
             "var1": "1",
             "var:2": 1,
-            "dict": {1:1}
+            "dict": {1: 1}
         }
 
     def _generate_client(self):
         return Client(secret_key=self.secret_key,
-                        server_url="")
-
+                      server_url="")
 
     def test_token_generation(self):
         client = self._generate_client()
@@ -57,7 +57,7 @@ class TestClient(unittest.TestCase):
         str_data = json.dumps(self.data)
         self.assertEqual(
             token,
-            token_generator.derive(str_data.encode()).hex()
+            get_str_to_hex(token_generator.derive(str_data.encode()))
         )
 
     @mock.patch('robot_status_cli.base.requests.post', side_effect=mocked_requests_post)

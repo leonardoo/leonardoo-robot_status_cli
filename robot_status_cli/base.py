@@ -18,7 +18,7 @@ class Client(object):
         return get_token_generator(self._secret_key)
 
     def send(self, url, data, public_key):
-        token = "bearer {}".format(self.generate_token(data))
+        token = "bearer {0}".format(self.generate_token(data))
         try:
             response = requests.post(url,
                                      data,
