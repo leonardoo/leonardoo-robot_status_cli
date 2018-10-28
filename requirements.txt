@@ -1,3 +1,2 @@
 requests==2.13.0
-pycparser==2.18
-cryptography==2.1.4
+cryptography>=2.3
