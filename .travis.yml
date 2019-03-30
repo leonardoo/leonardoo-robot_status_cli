@@ -9,8 +9,6 @@ cache:
 matrix:
     include:
         # these are just to make travis's UI a bit prettier
-        - python: 2.7
-          env: TOXENV=py27
         - python: 3.5
           env: TOXENV=py35
         - python: 3.6
