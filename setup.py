@@ -39,7 +39,7 @@ if sys.argv[-1] == 'tag':
 
 setup(
     name='robot_status_cli',
-    version='0.1.0',
+    version='0.2.0',
     packages=find_packages(exclude=['tests', 'tests.*']),
     url='',
     install_requires=["requests==2.13.0",
@@ -52,7 +52,6 @@ setup(
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
