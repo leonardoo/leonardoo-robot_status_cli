@@ -1,37 +1,34 @@
 
 import json
 
+from datetime import datetime
+
 import requests
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
-from .utils import get_token_generator
-from .compat import get_str_to_hex
+
+def get_token_generator(secret_key):
+    backend = default_backend()
+    kdf = PBKDF2HMAC(
+        algorithm=hashes.SHA256(),
+        length=32,
+        salt=secret_key.encode(),
+        iterations=100000,
+        backend=backend
+    )
+    return kdf
 
 
-class Client(object):
+def generate_token(secret_key, data):
+    str_data = json.dumps(data)
+    token_generator = get_token_generator(secret_key)
+    token = token_generator.derive(str_data.encode())
+    return token.hex()
 
-    def __init__(self, secret_key, server_url):
-        self._secret_key = secret_key
-        self.server_url = server_url
 
-    @property
-    def token_generator(self):
-        return get_token_generator(self._secret_key)
+def verify_token(secret_key, data, token):
+    kdf = get_token_generator(secret_key)
+    kdf.verify(data.encode(), bytes.fromhex(token))
 
-    def send(self, url, data, public_key):
-        token = "bearer {0}".format(self.generate_token(data))
-        try:
-            response = requests.post(url,
-                                     data,
-                                     headers={'Authorization': token,
-                                              'public_key': public_key},
-                                     timeout=10)
-            if response.status_code == 201:
-                return True, None
-            else:
-                return False, response.status_code
-        except Exception as e:
-            return False, None
-
-    def generate_token(self, data):
-        str_data = json.dumps(data)
-        return get_str_to_hex(self.token_generator.derive(str_data.encode()))
