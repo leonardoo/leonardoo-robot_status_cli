@@ -20,7 +20,7 @@ class Client:
         return requests.get(url, headers=headers, timeout=10)
 
     def get_headers(self, public_key, data=None, method="POST"):
-        headers = {'public_key': public_key}
+        headers = {'public-key': public_key}
         if method == "GET":
             data = {"timestamp": datetime.utcnow().isoformat()}
             headers.update({
